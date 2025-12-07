@@ -43,6 +43,15 @@ class Results(models.Model):
     def __str__(self):
         return f"User {self.user.username} - Image {self.image_idx}: {self.image} - Score {self.score}"
 
+
+class StepSettings(models.Model):
+    set_1_2_text = models.CharField(max_length=100, default="NAN")
+    set_3_4_text = models.CharField(max_length=100, default="NAN")
+    
+    def __str__(self):
+        return f"Step settings:\nText in sets 1 and 2: {self.set_1_2_text},\nText in sets 3 and 4: {self.set_3_4_text}"
+
+
 # Just testing 
 class TestTableMigration(models.Model):
     test_field = models.CharField(max_length=20)

@@ -197,7 +197,7 @@
                     console.log("Image name:", data.image_name);
                     document.getElementById("imageName").textContent = data.image_name;
                 }
-                if (data.image_idx) {
+                if (data.image_idx && data.step_sizes) {
                     console.log("Image index:", data.image_idx);
                     document.getElementById("imageIdx").textContent = data.image_idx;
                     if (parseInt(data.image_idx) <= 50) {
@@ -206,7 +206,7 @@
                             document.getElementById("comparisonText").textContent = "Oglejte si sliko in pritisnite gumb Da.";
                         } else {
                             document.getElementById("noBtn").style.display = "flex";
-                            document.getElementById("comparisonText").textContent = "Ali je ta slika enaka kot ena slika pred njo?";
+                            document.getElementById("comparisonText").textContent = data.step_sizes[0];
                         }
                     } else {
                         if (parseInt(data.image_idx) == 51 || parseInt(data.image_idx) == 52) {
@@ -214,7 +214,7 @@
                             document.getElementById("comparisonText").textContent = "Oglejte si sliko in pritisnite gumb Da.";
                         } else {
                             document.getElementById("noBtn").style.display = "flex";
-                            document.getElementById("comparisonText").textContent = "Ali je ta slika enaka kot dve sliki pred njo?";
+                            document.getElementById("comparisonText").textContent = data.step_sizes[1];
                         }
                     }
                 }

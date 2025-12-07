@@ -1,5 +1,5 @@
 import pandas as pd
-from .models import Sequence, UserSequence, Results
+from .models import Sequence, UserSequence, Results, StepSettings
 from django.contrib.auth.models import User
 from django.db import connection
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
@@ -156,7 +156,9 @@ def pseudo_random(user_id: int) -> str:
         raise Exception("Invalid image index")
     
     
-    
+def get_step_sizes() -> list:
+    step_sizes = StepSettings.objects.first() # We only use first row!
+    return [step_sizes.set_1_2_text, step_sizes.set_3_4_text]
     
     
 def user_is_admin(user):
