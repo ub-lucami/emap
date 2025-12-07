@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 import ast
 from django.core.exceptions import ValidationError
 from .forms import UploadExcelForm
-from .utils import excel_to_db, log, reset_auto_increment, pseudo_random, user_is_admin
+from .utils import excel_to_db, log, reset_auto_increment, pseudo_random, user_is_admin, get_step_sizes
 from django.db import connection
 import os
 from django.conf import settings
@@ -58,7 +58,8 @@ def get_image(request):
             "image_url": image_url,
             "image_name": image_name,
             "image_idx": image_idx,
-            "image_idx_in_set": image_idx_in_set
+            "image_idx_in_set": image_idx_in_set,
+            "step_sizes": get_step_sizes()
         }
         return JsonResponse(response_data)
     
