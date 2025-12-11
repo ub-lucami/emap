@@ -10,7 +10,6 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      # Remove MARIADB_AUTO_UPGRADE if you added it before
     volumes:
       - db_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:ro
@@ -50,3 +49,4 @@ services:
 volumes:
   db_data:
     driver: local
+
