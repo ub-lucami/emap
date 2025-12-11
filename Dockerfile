@@ -1,26 +1,30 @@
+
 FROM python:3.10-slim
 
-# Set environment variables
+# Runtime behavior
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 
-# Install system dependencies for mysqlclient
+# Build deps for mysqlclient (and general Python wheels)
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    apt-transport-https \
-    gcc \
-    default-libmysqlclient-dev \
-    libmariadb-dev-compat \
-    python3-dev \
-    build-essential \
- && rm -rf /var/lib/apt/lists/* \
- && apt-get clean
+USER root
 
-# Install Python dependencies
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        build-essential \
+        python3-dev \
+        pkg-config \
+        libmariadb-dev \
+        libmariadb-dev-compat \
+    ; \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies first to leverage Docker layer caching
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -29,5 +33,5 @@ COPY . /app/
 
 EXPOSE 8000
 
-# Run Django server
+# Run Django (dev server). For production, prefer gunicorn/uvicorn behind a reverse proxy.
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
