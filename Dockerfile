@@ -7,13 +7,18 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies for mysqlclient
-RUN apt-get update && apt-get install -y \
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    apt-transport-https \
     gcc \
     default-libmysqlclient-dev \
     libmariadb-dev-compat \
     python3-dev \
     build-essential \
-    && apt-get clean
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get clean
 
 # Install Python dependencies
 COPY requirements.txt /app/
