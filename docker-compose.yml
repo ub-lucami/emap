@@ -39,10 +39,24 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     command: >
-      sh -c "python manage.py migrate --noinput && \
+      sh -c "python - <<'PY'
+import socket,sys,time
+for i in range(60):
+  try:
+    s=socket.create_connection(('db',3306),2)
+    s.close()
+    print('db is available')
+    break
+  except Exception:
+    print('waiting for db...')
+    time.sleep(1)
+else:
+  print('db not available, exiting')
+  sys.exit(1)
+PY
+&& python manage.py migrate --noinput && \
       python manage.py collectstatic --noinput || true && \
       gunicorn landing_page.wsgi:application --bind 0.0.0.0:8000 || python manage.py runserver 0.0.0.0:8000"
 
