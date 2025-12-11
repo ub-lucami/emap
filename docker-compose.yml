@@ -10,15 +10,16 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # Remove MARIADB_AUTO_UPGRADE if you added it before
     volumes:
       - db_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD", "mariadb", "--user=${DB_USER}", "--password=${DB_PASSWORD}", "--host=127.0.0.1", "--port=3306", "--execute=SELECT 1"]
       interval: 10s
       timeout: 5s
-      retries: 10
-      start_period: 30s  # Gives extra time for initial DB setup/init scripts
+      retries: 12
+      start_period: 40s  # Extra time for init scripts on first run
 
   web:
     build: .
