@@ -14,11 +14,11 @@ services:
       - db-data:/var/lib/mysql
       - ./sql/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
     healthcheck:
-      test: ["CMD", "mariadb-admin", "--protocol=tcp", "ping"]
-      interval: 10s
-      timeout: 5s
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s     # Gives time for initial setup
+      interval: 30s
+      timeout: 10s
       retries: 5
-
   app:
     build: .
     container_name: emap-app
