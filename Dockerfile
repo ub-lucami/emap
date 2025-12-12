@@ -1,6 +1,7 @@
 
 #FROM python:3.10-bullseye
-FROM python:3.11-slim-bookworm  # Explicit Bookworm for reliable packages
+FROM python:3.11-slim-bookworm  
+# Explicit Bookworm for reliable packages
 
 # Runtime behavior
 ENV PYTHONDONTWRITEBYTECODE=1
