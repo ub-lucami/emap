@@ -14,14 +14,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 USER root
 
 # Install system dependencies in one layer
-RUN set -eux; \
-    apt-get update; \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
         python3-dev \
         pkg-config \
-        default-libmysqlclient-dev; \
-    apt-get clean; \
+        default-libmysqlclient-dev \
+        libmariadb-dev \
+        libmariadb-dev-compat && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies first to leverage Docker layer caching
