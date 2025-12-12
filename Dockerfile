@@ -1,34 +1,31 @@
 
 FROM python:3.11-bullseye
-#FROM python:3.11-slim-bookworm  
-# Explicit Bookworm for reliable packages
-
-# Runtime behavior
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 
-# Install build dependencies in one chained layer
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        python3-dev \
-        pkg-config \
-        default-libmysqlclient-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install system dependencies for mysqlclient
+RUN apt-get update && apt-get install -y \
+    gcc \
+    default-libmysqlclient-dev \
+    libmariadb-dev-compat \
+    python3-dev \
+    build-essential \
+    && apt-get clean
 
 # Install Python dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project code
+# Copy project files
 COPY . /app/
 
-# Collect static files
-RUN python manage.py collectstatic --noinput --clear
+EXPOSE 8000
+
+# Run Django server
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # Run migrations and start Gunicorn
 CMD python manage.py migrate --noinput && \
