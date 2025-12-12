@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: mariadb:latest
+    image: mariadb:10.11  # pinned stable version, latest has been buggy lately
     container_name: emap-db
     restart: always
     environment:
@@ -10,15 +10,16 @@ services:
       MARIADB_DATABASE: ${DB_NAME}
       MARIADB_USER: ${DB_USER}
       MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 0
     volumes:
       - db-data:/var/lib/mysql
       - ./sql/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
     healthcheck:
-      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--innodb_initialized"]
-      start_period: 30s     # Gives time for initial setup
-      interval: 30s
+      test: ["CMD", "mariadb-admin", "--protocol=tcp", "ping"]
+      interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 30        # ← gives up to 5 minutes total
+      start_period: 60s  # ← waits 60 seconds before first check (critical!)
   app:
     build: .
     container_name: emap-app
