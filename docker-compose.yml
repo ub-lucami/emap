@@ -37,7 +37,6 @@ services:
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
       DJANGO_DEBUG: ${DJANGO_DEBUG}
     volumes:
-      - .:/app
       - static-volume:/app/staticfiles
       - media-volume:/app/media
 
