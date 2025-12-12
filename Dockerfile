@@ -1,6 +1,6 @@
 
 #FROM python:3.10-bullseye
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
 
 # Runtime behavior
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -19,9 +19,7 @@ RUN apt-get update && \
         build-essential \
         python3-dev \
         pkg-config \
-        default-libmysqlclient-dev \
-        libmariadb-dev \
-        libmariadb-dev-compat && \
+        default-libmysqlclient-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
