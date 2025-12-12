@@ -13,16 +13,24 @@ WORKDIR /app
 ENV DEBIAN_FRONTEND=noninteractive
 USER root
 
+# Install system dependencies in one layer
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         ca-certificates \
+        curl \
+        gnupg \
         build-essential \
         python3-dev \
         pkg-config \
+        default-libmysqlclient-dev; \
+    # Add MariaDB repository for compatibility
+    curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash -s -- --mariadb-server-version="10.11"; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
         libmariadb-dev \
-        libmariadb-dev-compat \
-    ; \
+        libmariadb-dev-compat; \
+    apt-get clean; \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies first to leverage Docker layer caching
