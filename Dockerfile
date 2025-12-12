@@ -1,5 +1,6 @@
 
-FROM python:3.10-bullseye
+#FROM python:3.10-bullseye
+FROM python:3.11-slim
 
 # Runtime behavior
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -31,7 +32,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . /app/
 
-EXPOSE 8000
+# EXPOSE 8000
 
 # Run Django (dev server). For production, prefer gunicorn/uvicorn behind a reverse proxy.
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+# Collect static files and prepare
+RUN python manage.py collectstatic --noinput --clear
+
+# Run migrations + collectstatic on start, then gunicorn
+CMD python manage.py migrate --noinput && \
+    python manage.py collectstatic --noinput --clear && \
+    gunicorn --bind 0.0.0.0:8000 emapp.wsgi:application
+# ↑↑↑ Replace "emapp" only if your Django project folder has a different name
