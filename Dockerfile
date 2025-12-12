@@ -1,6 +1,6 @@
 
-#FROM python:3.10-bullseye
-FROM python:3.11-slim-bookworm  
+FROM python:3.11-bullseye
+#FROM python:3.11-slim-bookworm  
 # Explicit Bookworm for reliable packages
 
 # Runtime behavior
