@@ -30,4 +30,4 @@ EXPOSE 8000
 # Run migrations and start Gunicorn
 CMD python manage.py migrate --noinput && \
     python manage.py collectstatic --noinput --clear && \
-    gunicorn --bind 0.0.0.0:8000 emapp.wsgi:application
+    gunicorn --bind 0.0.0.0:8000 landing_page.wsgi:application
