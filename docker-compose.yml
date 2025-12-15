@@ -38,6 +38,7 @@ services:
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
       DEBUG: ${DEBUG}
       LANGUAGE_CODE: ${LANGUAGE_CODE}
+      TIME_ZONE: ${TIME_ZONE}
       DB_ENGINE: ${DB_ENGINE} 
 #    volumes:
 #      - static-volume:/app/staticfiles
