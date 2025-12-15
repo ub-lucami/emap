@@ -37,8 +37,8 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
       DEBUG: ${DEBUG}
-      DEBUG: ${DEBUG}
-      LANGUAGE_CODE: ${LANGUAGE_CODE} 
+      LANGUAGE_CODE: ${LANGUAGE_CODE}
+      DB_ENGINE: ${DB_ENGINE} 
 #    volumes:
 #      - static-volume:/app/staticfiles
 #      - media-volume:/app/media
