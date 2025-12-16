@@ -146,3 +146,17 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# When running behind a reverse proxy (nginx) ensure Django handles
+# forwarded host/scheme correctly and that trusted origins are configured
+# for CSRF checks. Set `CSRF_TRUSTED_ORIGINS` in your `.env`, e.g.
+# CSRF_TRUSTED_ORIGINS=http://192.168.1.50
+USE_X_FORWARDED_HOST = True
+
+# If you terminate TLS at the proxy and communicate with Django over HTTP,
+# set the following to let Django detect HTTPS requests from X-Forwarded-Proto.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Read CSRF_TRUSTED_ORIGINS from env (comma-separated). For Django 4+ include
+# scheme (http/https), e.g. 'http://192.168.1.50' or 'https://example.com'.
+CSRF_TRUSTED_ORIGINS = [v for v in config('CSRF_TRUSTED_ORIGINS', default='').split(',') if v]
