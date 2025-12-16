@@ -35,6 +35,7 @@ LOGIN_URL = "/login/"  # Redirect to login page if user is not logged in
 
 INSTALLED_APPS = [
     "emapp.apps.EmappConfig",
+    "whitenoise.runserver_nostatic",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -134,6 +136,11 @@ STATICFILES_DIRS = [
 # Run `python manage.py collectstatic` and configure your web server to serve
 # the files from this folder when DEBUG=False.
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Use WhiteNoise storage to serve compressed static files with hashed names
+# If you run into ManifestStaticFilesStorage errors during `collectstatic`,
+# try `whitenoise.storage.CompressedStaticFilesStorage` instead.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

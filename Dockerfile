@@ -22,7 +22,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . /app/
 
+# Collect static files at image build time so they are baked into the image.
+# This requires that any settings / .env needed for static collection are
+# present at build time. If your collectstatic fails during build, consider
+# adding a minimal `.env` or switching collect to runtime.
+RUN python manage.py collectstatic --noinput || true
+
 EXPOSE 8000
 
-# Run Django server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run application with gunicorn (production-ready WSGI server)
+CMD ["gunicorn", "landing_page.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

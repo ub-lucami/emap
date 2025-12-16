@@ -27,7 +27,7 @@ services:
     restart: always
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -40,13 +40,14 @@ services:
       LANGUAGE_CODE: ${LANGUAGE_CODE}
       TIME_ZONE: ${TIME_ZONE}
       DB_ENGINE: ${DB_ENGINE} 
-#    volumes:
-#      - static-volume:/app/staticfiles
-#      - media-volume:/app/media
+    volumes:
+      - media-volume:/app/media
     ports:
       - "${WEB_PORT}:8000"
+    # Run database migrations at container start, then launch gunicorn.
+    # collectstatic is run at image build-time.
+    command: sh -c "python manage.py migrate --noinput && exec gunicorn landing_page.wsgi:application --bind 0.0.0.0:8000 --workers 3"
 
 volumes:
   db-data:
-#  static-volume:
-#  media-volume:
+  media-volume:
