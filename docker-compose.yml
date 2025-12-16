@@ -41,12 +41,28 @@ services:
       TIME_ZONE: ${TIME_ZONE}
       DB_ENGINE: ${DB_ENGINE} 
     volumes:
+      - static-volume:/app/staticfiles
       - media-volume:/app/media
-    ports:
-      - "${WEB_PORT}:8000"
+    # Do not publish the app port to host; nginx will expose port 80.
     # At container start the image entrypoint will collect static files,
     # apply migrations and start gunicorn (see `/app/entrypoint.sh`).
 
+  nginx:
+    image: nginx:stable-alpine
+    container_name: emap-nginx
+    restart: always
+    depends_on:
+      app:
+        condition: service_started
+    ports:
+      - "${WEB_PORT}:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - static-volume:/usr/share/nginx/html/static:ro
+      - media-volume:/usr/share/nginx/html/media:ro
+
 volumes:
   db-data:
+  static-volume:
   media-volume:
+  # nginx service will be added to serve static files and proxy to app
