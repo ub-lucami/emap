@@ -44,9 +44,8 @@ services:
       - media-volume:/app/media
     ports:
       - "${WEB_PORT}:8000"
-    # Run database migrations at container start, then launch gunicorn.
-    # collectstatic is run at image build-time.
-    command: sh -c "python manage.py migrate --noinput && exec gunicorn landing_page.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    # At container start the image entrypoint will collect static files,
+    # apply migrations and start gunicorn (see `/app/entrypoint.sh`).
 
 volumes:
   db-data:
