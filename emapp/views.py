@@ -23,6 +23,14 @@ IMAGE_LIST = [os.path.join("images", image) for image in os.listdir(os.path.join
 
 def landing_page(request):
     log.info("Landing page accessed")
+    # Always log out any authenticated user when arriving at the landing page
+    try:
+        if request.user.is_authenticated:
+            log.info(f"Logging out user {request.user.username} on landing page access")
+            logout(request)
+    except Exception as e:
+        log.error(f"Error logging out user on landing page: {e}")
+
     return render(request, "emapp/landing_page.html")
 
 @login_required
