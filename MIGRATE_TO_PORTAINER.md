@@ -1,4 +1,4 @@
-MIGRATE AN EXISTING REPO TO A DOCKER STACK (Portainer)
+MIGRATE AN EXISTING DJANGO (single Docker with external DB) TO A DOCKER STACK (Portainer)
 ===============================================
 
 Goal
