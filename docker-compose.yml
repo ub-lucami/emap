@@ -68,6 +68,4 @@ volumes:
   db-data:
   static-volume:
   media-volume:
-  # nginx service will be added to serve static files and proxy to app
-
-# No external Docker Config required when nginx config is baked into the image
+  # nginx service will be configured to serve static and media files and to proxy towards the app
