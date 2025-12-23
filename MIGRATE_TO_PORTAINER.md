@@ -441,6 +441,7 @@ Detailed commands (exact)
     3.3 Stage and commit changes in the Source Control view:
         - Open the Source Control panel (left activity bar). Click the `+` next to each changed file to stage it (or use `Stage All`).
         - Enter a commit message like "Apply Docker stack and nginx/mariadb changes" (you may autogenerate the commit message by clicking on icon to its right) and click the checkmark to commit.
+        - Click on 
 
     3.4 Push your branch to your fork (origin):
         - In the status bar or Source Control view click `Publish Branch` (or use the `...` menu → `Push`). This creates the branch on GitHub under your fork.
